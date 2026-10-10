@@ -1,0 +1,12 @@
+# Versions below are the ones the test-suite was run against.
+fastapi==0.143.0
+uvicorn[standard]==0.54.0
+python-multipart==0.0.32
+pydantic==2.14.0
+pydantic-settings==2.15.0
+sqlalchemy==2.1.4
+psycopg2-binary==2.9.13
+openai==3.26.1
+azure-search-documents==12.0.0
+azure-core==1.41.0
+pypdf==6.19.0

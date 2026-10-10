@@ -1,0 +1,37 @@
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: investor-postgres
+    environment:
+      POSTGRES_DB: investor_intelligence
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d investor_intelligence"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Optional: run the API in Docker too (docker compose up --build)
+  api:
+    build: .
+    container_name: investor-api
+    env_file: .env
+    environment:
+      # inside the compose network the database host is "postgres", not localhost
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/investor_intelligence
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+
+volumes:
+  postgres_data:
